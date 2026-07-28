@@ -27,20 +27,6 @@ time), plus a cross-model RMSE/bias skill overlay.
 | `data/` | Per-model forecast Zarr (`aifs_*`, `sfno_*`, `aurora_*`) + ERA5 verification (regenerated on first run; AIFS v2's is reused). |
 | `figures/` | Output maps and plots. |
 
-## Run
-
-```bash
-cd /home/jovyan/West-Coast
-uv sync                      # one-time: build the venv
-# open HeatWaves.ipynb with the "Heat-Waves (AIFS2)" kernel, or:
-uv run jupyter nbconvert --to notebook --execute --inplace \
-    --ExecutePreprocessor.kernel_name=heat-waves HeatWaves.ipynb
-```
-
-The first run downloads each model's checkpoint and full ERA5 initial state from the Copernicus CDS
-(needs `~/.cdsapirc`); both are cached, so re-runs are fast. AIFS v2's forecast is already cached and
-is reused as-is; the **first SFNO and Aurora runs** download weights and run a global 12-day forecast
-(Aurora is the heavy one).
 
 ## Notes / caveats
 
