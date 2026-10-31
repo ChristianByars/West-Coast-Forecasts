@@ -47,7 +47,7 @@ _Filled in after the verified run._
 
 ## Quick start
 
-Requires Python 3.12, [uv](https://docs.astral.sh/uv/), and an NVIDIA GPU with 46 GB+ of VRAM.
+Requires Python 3.12, [uv](https://docs.astral.sh/uv/), and an NVIDIA GPU with about 48 GB of VRAM (developed and tested on an L40).
 
 ```bash
 git clone https://github.com/ChristianByars/West-Coast-Forecasts.git
@@ -55,6 +55,8 @@ cd West-Coast-Forecasts
 uv sync
 uv run python -m ipykernel install --user --name west-coast --display-name "west-coast"
 ```
+
+`uv sync` expects two prebuilt wheels (flash-attn and torch-harmonics) in a `wheels/` folder; see [docs/environment.md](docs/environment.md).
 
 Open a notebook in JupyterLab and select the **west-coast** kernel, then run all cells.
 
