@@ -1,49 +1,40 @@
 [project]
-name = "heat-waves"
+name = "west-coast-forecasts"
 version = "0.1.0"
-description = "Heat-wave prediction with ECMWF AIFS2 vs ERA5 (Sept 2022 California heat wave)"
+description = "AI weather models vs ERA5 on West Coast extremes: the September 2022 California heat wave and the New Year 2023 atmospheric-river flood, with NVIDIA Earth2Studio"
+readme = "README.md"
 requires-python = "==3.12.*"
+authors = [{ name = "Christian Byars" }]
 dependencies = [
-    # earth2studio from git main: only main has the AIFS2 model + [aifs2] extra
-    # (PyPI 0.15.0 has aifs/aifsens only). aifs2 pulls anemoi-models 0.9.x,
-    # earthkit-regrid, ecmwf-opendata, torch-geometric, flash-attn.
-    "earth2studio[aifs2,data,aurora,sfno]",
-    # Pin torch to the exact build the cached flash-attn wheel was made for
-    # (rebuilt against torch 2.13.0+cu132). ABI mismatch => import crash.
+    "earth2studio[aifs2,aurora,data,sfno]==0.20.0",
     "torch==2.13.0",
-    "flash-attn",
-    "xarray>=2024.1.0",
-    "zarr>=2.18.0",
-    "netcdf4>=1.6.0",
-    "h5netcdf>=1.3.0",
-    "matplotlib>=3.8.1",
     "cartopy>=0.22.0",
-    "numpy>=2.0",
-    "tqdm>=4.60.0",
-    "ninja>=1.13.0",
+    "cdsapi>=0.7.0",
+    "h5netcdf>=1.3.0",
+    "makani",  # not on PyPI: resolved from [tool.uv.sources] (earth2studio[sfno] needs it; uv ignores a dependency's sources)
+    "matplotlib>=3.8.1",
+    "netcdf4>=1.6.0",
+    "numpy>=1.26",
     "nvidia-ml-py",
-    "cupy-cuda13x>=14.0.0",
-    "cucim-cu13>=25.4.0",
-    "pytest>=9.0.3",
-    # nvidia-physicsnemo 2.0.0 (pulled by makani for SFNO) calls warp.context.Device, removed in
-    # newer warp-lang; pin below the API break so physicsnemo imports cleanly.
-    "warp-lang>=1.5,<1.13",
+    "pandas>=2.0.0",
+    "pytest>=9.0.3",  # cupy.testing import guard: importing cupy without pytest crashes
+    "xarray>=2024.10.0",
+    "zarr>=2.18.0",
 ]
 
 [dependency-groups]
-dev = ["ipykernel>=7.1.0"]
+dev = ["ipykernel>=7.1.0", "nbconvert>=7.16.0"]
 
 [tool.uv.sources]
-earth2studio = { git = "https://github.com/NVIDIA/earth2studio.git", branch = "main" }
 torch = { index = "pytorch-cu132" }
-# Reuse the prebuilt, ABI-matched flash-attn wheel instead of a multi-hour source build.
-flash-attn = { path = "/home/jovyan/wheels/flash_attn-2.8.3-cp312-cp312-linux_x86_64.whl" }
+makani = { git = "https://github.com/NVIDIA/makani.git", rev = "b38fcb2799d7dbc146fa60459f3f9823394a8bf1" }  # same pin as earth2studio 0.20.0
+flash-attn = { path = "wheels/flash_attn-2.8.3-cp312-cp312-linux_x86_64.whl" }
+torch-harmonics = { path = "wheels/torch_harmonics-0.8.1-cp312-cp312-linux_x86_64.whl" }
 
 [tool.uv]
-# torch-harmonics (pulled by makani for SFNO) compiles torch C++ extensions and needs torch
-# importable at build time, so it must build without isolation against the installed torch.
-no-build-isolation-package = ["flash-attn", "torch-harmonics"]
 index-strategy = "unsafe-best-match"
+override-dependencies = ["torch-harmonics==0.8.1", "flash-attn==2.8.3"]
+no-build-isolation-package = ["torch-harmonics", "flash-attn"]
 
 [tool.uv.extra-build-dependencies]
 flash-attn = ["torch", "packaging", "ninja"]
@@ -57,3 +48,7 @@ explicit = true
 [[tool.uv.index]]
 url = "https://pypi.nvidia.com"
 priority = "supplemental"
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
