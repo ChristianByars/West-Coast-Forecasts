@@ -8,9 +8,9 @@ dependencies = [
     # (PyPI 0.15.0 has aifs/aifsens only). aifs2 pulls anemoi-models 0.9.x,
     # earthkit-regrid, ecmwf-opendata, torch-geometric, flash-attn.
     "earth2studio[aifs2,data,aurora,sfno]",
-    # Pin torch to the exact build the cached flash-attn 2.8.3 wheel was made for
-    # (Earth2 venv: torch 2.6.0+cu124, cxx11abi=False). ABI mismatch => import crash.
-    "torch==2.6.0",
+    # Pin torch to the exact build the cached flash-attn wheel was made for
+    # (rebuilt against torch 2.13.0+cu132). ABI mismatch => import crash.
+    "torch==2.13.0",
     "flash-attn",
     "xarray>=2024.1.0",
     "zarr>=2.18.0",
@@ -22,12 +22,12 @@ dependencies = [
     "tqdm>=4.60.0",
     "ninja>=1.13.0",
     "nvidia-ml-py",
-    "cupy-cuda12x>=14.0.0",
-    "cucim-cu12>=26.4.0",
+    "cupy-cuda13x>=14.0.0",
+    "cucim-cu13>=25.4.0",
     "pytest>=9.0.3",
     # nvidia-physicsnemo 2.0.0 (pulled by makani for SFNO) calls warp.context.Device, removed in
     # newer warp-lang; pin below the API break so physicsnemo imports cleanly.
-    "warp-lang>=1.5,<1.8",
+    "warp-lang>=1.5,<1.13",
 ]
 
 [dependency-groups]
@@ -35,25 +35,23 @@ dev = ["ipykernel>=7.1.0"]
 
 [tool.uv.sources]
 earth2studio = { git = "https://github.com/NVIDIA/earth2studio.git", branch = "main" }
-torch = { index = "pytorch-cu124" }
+torch = { index = "pytorch-cu132" }
 # Reuse the prebuilt, ABI-matched flash-attn wheel instead of a multi-hour source build.
 flash-attn = { path = "/home/jovyan/wheels/flash_attn-2.8.3-cp312-cp312-linux_x86_64.whl" }
 
 [tool.uv]
-# Exclude the cu13 cupy/cucim variants earth2studio pulls transitively (pod has CUDA 12.4
-# runtime libs only). The `python_version < '0'` marker is always false => drops the package.
-override-dependencies = [
-    "cucim-cu13 ; python_version < '0'",
-    "cupy-cuda13x ; python_version < '0'",
-]
 # torch-harmonics (pulled by makani for SFNO) compiles torch C++ extensions and needs torch
 # importable at build time, so it must build without isolation against the installed torch.
 no-build-isolation-package = ["flash-attn", "torch-harmonics"]
 index-strategy = "unsafe-best-match"
 
+[tool.uv.extra-build-dependencies]
+flash-attn = ["torch", "packaging", "ninja"]
+torch-harmonics = ["torch"]
+
 [[tool.uv.index]]
-name = "pytorch-cu124"
-url = "https://download.pytorch.org/whl/cu124"
+name = "pytorch-cu132"
+url = "https://download.pytorch.org/whl/cu132"
 explicit = true
 
 [[tool.uv.index]]
