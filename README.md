@@ -6,7 +6,7 @@ Two notebooks compare AI weather models with ERA5 on West Coast extremes, using 
 
 ## Results at a glance
 
-Bias is always model − ERA5. The heat-wave table scores daily maximum 2 m temperature in °C at global, CONUS and California scales, on the peak day and averaged over the event window (31 August – 9 September 2022). The flood table scores event-total precipitation (Dec 31 – Jan 1) over the West Coast box in mm for each lead time. ERA5 is the reference for both, but ERA5 precipitation is itself model-derived (reanalysis output, not gauge or radar data), so these numbers measure agreement with ERA5, not with observed rainfall.
+Bias is always model − ERA5. Regions are latitude–longitude rectangles that include ocean and neighbouring land: California is 32–42°N, 125–114°W; CONUS is 24–50°N, 125–66°W; the flood's West Coast box is 32–47°N, 128–113°W. The heat-wave table scores daily maximum 2 m temperature in °C at global, CONUS and California scales, on the peak day and averaged over the event window (31 August – 9 September 2022). The flood table scores event-total precipitation (Dec 31 – Jan 1) over the West Coast box in mm for each lead time. ERA5 is the reference for both, but ERA5 precipitation is itself model-derived (reanalysis output, not gauge or radar data), so these numbers measure agreement with ERA5, not with observed rainfall. In the flood table, "Pattern corr" is the area-weighted correlation between the forecast and ERA5 event-total fields (1 means the same spatial shape), and "Total bias (%)" is the difference of the two area means relative to the ERA5 area mean, not an average of local percentage errors.
 
 **Heat wave: daily maximum 2 m temperature against ERA5, by region and model**
 
@@ -31,7 +31,7 @@ Bias is always model − ERA5. The heat-wave table scores daily maximum 2 m temp
 | 10 | -12.43 | 26.65 | 16.74 | -0.16 | 4.20 | 16.70 | -74.60 |
 <!-- Flooding_metrics:END -->
 
-At every lead the forecast produces far less rain than ERA5 (total bias −56% to −75%), and the spatial pattern is only skilful at 3 days (pattern correlation 0.66, against about 0 at 7 and 10 days).
+At every lead the forecast produces far less rain than ERA5 (total bias −56% to −75%), and the spatial pattern is only skilful at 3 days (pattern correlation 0.66, against −0.02 and −0.16 at 7 and 10 days).
 
 ![SFNO + PrecipitationAFNO v2 and ERA5 event-total precipitation over the West Coast for 3, 7 and 10 days of lead time, with the difference](docs/images/precip_eventtotal_leadsweep.png)
 
@@ -48,7 +48,7 @@ At every lead the forecast produces far less rain than ERA5 (total bias −56% t
 
 ## Quick start
 
-Requires Python 3.12, [uv](https://docs.astral.sh/uv/), and an NVIDIA GPU with about 48 GB of VRAM (developed and tested on an L40).
+Requires Python 3.12, [uv](https://docs.astral.sh/uv/), and an NVIDIA GPU (developed and tested on an L40 with 48 GB; the table under *Notebooks* lists each notebook's peak GPU memory).
 
 ```bash
 git clone https://github.com/ChristianByars/West-Coast-Forecasts.git
@@ -63,11 +63,13 @@ Open a notebook in JupyterLab and select the **west-coast** kernel, then run all
 
 ## Notebooks
 
+The table shows the latest verified run, with the Copernicus CDS inputs already cached. The first runs, with an empty cache, took 51 min (HeatWaves) and 26 min (Flooding), almost all of it waiting for downloads.
+
 <!-- RUNS:START -->
 | Notebook | Runtime | Peak GPU memory (GiB) |
 |---|---|---|
-| HeatWaves.ipynb | 51 min | 30.60 |
-| Flooding.ipynb | 26 min | 17.40 |
+| HeatWaves.ipynb | 7 min | 30.60 |
+| Flooding.ipynb | 2 min | 17.40 |
 <!-- RUNS:END -->
 
 | Notebook | Event | Models | Verified against |
@@ -97,6 +99,6 @@ Pinned versions, install caveats, and fixes are in [docs/environment.md](docs/en
 
 - [NVIDIA Earth2Studio](https://github.com/NVIDIA/earth2studio) and its [documentation](https://nvidia.github.io/earth2studio/)
 - [ERA5 hourly data on single levels](https://cds.climate.copernicus.eu/datasets/reanalysis-era5-single-levels) (Copernicus Climate Data Store)
-- [Spherical Fourier Neural Operators: Learning Stable Dynamics on the Sphere](https://arxiv.org/abs/2306.03838) (the SFNO paper) and [Modulus-Makani](https://github.com/NVIDIA/modulus-makani), the NVIDIA code SFNO is trained with
+- [Spherical Fourier Neural Operators: Learning Stable Dynamics on the Sphere](https://arxiv.org/abs/2306.03838) (the SFNO paper) and [Modulus-Makani](https://github.com/NVIDIA/makani), the NVIDIA code SFNO is trained with
 - [SFNO 73-channel checkpoint](https://catalog.ngc.nvidia.com/orgs/nvidia/teams/modulus/models/sfno_73ch_small) and [PrecipitationAFNO v2 checkpoint](https://catalog.ngc.nvidia.com/orgs/nvidia/teams/earth-2/models/afno_dx_tp-v1-era5) (NVIDIA NGC)
 - [uv](https://docs.astral.sh/uv/)

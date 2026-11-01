@@ -17,7 +17,7 @@ dependencies = [
     "numpy>=1.26",
     "nvidia-ml-py",
     "pandas>=2.0.0",
-    "pytest>=9.0.3",  # cupy.testing import guard: importing cupy without pytest crashes
+    "pytest>=9.0.3",  # runs the unit tests in tests/
     "xarray>=2024.10.0",
     "zarr>=2.18.0",
 ]
