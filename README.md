@@ -26,9 +26,9 @@ Bias is always model − ERA5. Regions are latitude–longitude rectangles that 
 <!-- Flooding_metrics:START -->
 | Lead (days) | Bias | RMSE | MAE | Pattern corr | Forecast area-mean | Reference area-mean | Total bias (%) |
 |---|---|---|---|---|---|---|---|
-| 3 | -9.32 | 19.18 | 12.10 | 0.66 | 7.40 | 16.70 | -55.90 |
-| 7 | -10.64 | 25.57 | 16.86 | -0.02 | 6.00 | 16.70 | -63.80 |
-| 10 | -12.43 | 26.65 | 16.74 | -0.16 | 4.20 | 16.70 | -74.60 |
+| 3 | -9.32 | 19.18 | 12.10 | 0.66 | 7.4 | 16.7 | -55.9 |
+| 7 | -10.64 | 25.57 | 16.86 | -0.02 | 6.0 | 16.7 | -63.8 |
+| 10 | -12.43 | 26.65 | 16.74 | -0.16 | 4.2 | 16.7 | -74.6 |
 <!-- Flooding_metrics:END -->
 
 At every lead the forecast produces far less rain than ERA5 (total bias −56% to −75%), and the spatial pattern is only skilful at 3 days (pattern correlation 0.66, against −0.02 and −0.16 at 7 and 10 days).
@@ -68,8 +68,8 @@ The table shows the latest verified run, with the Copernicus CDS inputs already 
 <!-- RUNS:START -->
 | Notebook | Runtime | Peak GPU memory (GiB) |
 |---|---|---|
-| HeatWaves.ipynb | 7 min | 30.60 |
-| Flooding.ipynb | 2 min | 17.40 |
+| HeatWaves.ipynb | 7 min | 30.6 |
+| Flooding.ipynb | 2 min | 17.4 |
 <!-- RUNS:END -->
 
 | Notebook | Event | Models | Verified against |
