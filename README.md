@@ -11,7 +11,14 @@ Bias is always model − ERA5. The heat-wave table scores daily maximum 2 m temp
 **Heat wave: daily maximum 2 m temperature against ERA5, by region and model**
 
 <!-- HeatWaves_metrics:START -->
-_Filled in after the verified run._
+| Region | Model | Peak-day bias (°C) | Peak-day RMSE (°C) | Peak-day MAE (°C) | Event-mean bias (°C) | Event-mean RMSE (°C) |
+|---|---|---|---|---|---|---|
+| Global | SFNO | -0.30 | 2.64 | 1.61 | -0.22 | 2.17 |
+| Global | Aurora | -0.70 | 2.40 | 1.63 | -0.58 | 1.90 |
+| Conus | SFNO | -0.17 | 2.45 | 1.76 | 0.42 | 2.08 |
+| Conus | Aurora | -0.68 | 2.78 | 2.14 | -0.45 | 2.31 |
+| California | SFNO | -0.39 | 1.90 | 1.48 | -0.33 | 1.73 |
+| California | Aurora | -1.43 | 2.36 | 1.71 | -0.97 | 1.87 |
 <!-- HeatWaves_metrics:END -->
 
 **Flood: SFNO + PrecipitationAFNO v2 event-total precipitation against ERA5, by lead time**
