@@ -24,8 +24,14 @@ Bias is always model − ERA5. The heat-wave table scores daily maximum 2 m temp
 **Flood: SFNO + PrecipitationAFNO v2 event-total precipitation against ERA5, by lead time**
 
 <!-- Flooding_metrics:START -->
-_Filled in after the verified run._
+| Lead (days) | Bias | RMSE | MAE | Pattern corr | Forecast area-mean | Reference area-mean | Total bias (%) |
+|---|---|---|---|---|---|---|---|
+| 3 | -9.32 | 19.18 | 12.10 | 0.66 | 7.40 | 16.70 | -55.90 |
+| 7 | -10.64 | 25.57 | 16.86 | -0.02 | 6.00 | 16.70 | -63.80 |
+| 10 | -12.43 | 26.65 | 16.74 | -0.16 | 4.20 | 16.70 | -74.60 |
 <!-- Flooding_metrics:END -->
+
+At every lead the forecast produces far less rain than ERA5 (total bias −56% to −75%), and the spatial pattern is only skilful at 3 days (pattern correlation 0.66, against about 0 at 7 and 10 days).
 
 ![SFNO + PrecipitationAFNO v2 and ERA5 event-total precipitation over the West Coast for 3, 7 and 10 days of lead time, with the difference](docs/images/precip_eventtotal_leadsweep.png)
 
@@ -58,7 +64,10 @@ Open a notebook in JupyterLab and select the **west-coast** kernel, then run all
 ## Notebooks
 
 <!-- RUNS:START -->
-_Runtime and GPU memory are filled in after the verified run._
+| Notebook | Runtime | Peak GPU memory (GiB) |
+|---|---|---|
+| HeatWaves.ipynb | 51 min | 30.60 |
+| Flooding.ipynb | 26 min | 17.40 |
 <!-- RUNS:END -->
 
 | Notebook | Event | Models | Verified against |

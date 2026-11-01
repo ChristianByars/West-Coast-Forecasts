@@ -1,0 +1,4 @@
+Lead (days),Bias,RMSE,MAE,Pattern corr,Forecast area-mean,Reference area-mean,Total bias (%)
+3,-9.319,19.176,12.098,0.658,7.4,16.7,-55.9
+7,-10.642,25.575,16.855,-0.022,6.0,16.7,-63.8
+10,-12.431,26.649,16.738,-0.157,4.2,16.7,-74.6
