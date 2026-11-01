@@ -2,7 +2,7 @@
 
 ![Peak-day maximum temperature over California: SFNO and Aurora against ERA5](docs/images/maps_peakday_california.png)
 
-Two notebooks compare AI weather models with ERA5 on West Coast extremes, using [NVIDIA Earth2Studio](https://github.com/NVIDIA/earth2studio): `HeatWaves.ipynb` runs NVIDIA's SFNO and Microsoft's Aurora on the September 2022 California heat wave (peak around 6 September), and `Flooding.ipynb` runs ECMWF's AIFS v2, initialized 3, 7 and 10 days before the New Year 2022–23 atmospheric river. AIFS v2 is used only in the flood notebook.
+Two notebooks compare AI weather models with ERA5 on West Coast extremes, using [NVIDIA Earth2Studio](https://github.com/NVIDIA/earth2studio): `HeatWaves.ipynb` runs NVIDIA's SFNO and Microsoft's Aurora on the September 2022 California heat wave (peak around 6 September), and `Flooding.ipynb` runs NVIDIA's SFNO together with the PrecipitationAFNO v2 precipitation model, initialized 3, 7 and 10 days before the New Year 2022–23 atmospheric river. SFNO has no precipitation output of its own, so the flood notebook's precipitation is a model-derived estimate from that second network.
 
 ## Results at a glance
 
@@ -14,7 +14,7 @@ Bias is always model − ERA5. The heat-wave table scores daily maximum 2 m temp
 _Filled in after the verified run._
 <!-- HeatWaves_metrics:END -->
 
-**Flood: AIFS v2 event-total precipitation against ERA5, by lead time**
+**Flood: SFNO + PrecipitationAFNO v2 event-total precipitation against ERA5, by lead time**
 
 <!-- Flooding_metrics:START -->
 _Filled in after the verified run._
@@ -28,13 +28,13 @@ _Filled in after the verified run._
 
 *Heat wave: days that belong to a run of three or more consecutive days above each threshold, model against ERA5.*
 
-![AIFS v2 and ERA5 event-total precipitation over the West Coast for 3, 7 and 10 days of lead time, with the difference](docs/images/precip_eventtotal_leadsweep.png)
+![SFNO + PrecipitationAFNO v2 and ERA5 event-total precipitation over the West Coast for 3, 7 and 10 days of lead time, with the difference](docs/images/precip_eventtotal_leadsweep.png)
 
-*Flood: event-total precipitation (Dec 31 – Jan 1) from AIFS v2 at each lead time next to ERA5, with AIFS v2 − ERA5 in the last column.*
+*Flood: event-total precipitation (Dec 31 – Jan 1) from SFNO + PrecipitationAFNO v2 at each lead time next to ERA5, with SFNO + PrecipitationAFNO v2 − ERA5 in the last column.*
 
-![Event-total precipitation at five flood locations: ERA5 and AIFS v2 at 3, 7 and 10 days of lead time](docs/images/precip_eventtotal_by_location.png)
+![Event-total precipitation at five flood locations: ERA5 and SFNO + PrecipitationAFNO v2 at 3, 7 and 10 days of lead time](docs/images/precip_eventtotal_by_location.png)
 
-*Flood: event totals at the exact grid cell of five flood-affected locations, ERA5 against AIFS v2 at each lead time.*
+*Flood: event totals at the exact grid cell of five flood-affected locations, ERA5 against SFNO + PrecipitationAFNO v2 at each lead time.*
 
 ## Models and data
 
@@ -42,7 +42,7 @@ _Filled in after the verified run._
 |---|---|---|---|
 | SFNO | NVIDIA | `HeatWaves.ipynb` | ERA5 (Copernicus CDS), 2022-08-30 00Z, 12-day forecast |
 | Aurora | Microsoft | `HeatWaves.ipynb` | ERA5 (Copernicus CDS), 2022-08-30 00Z, 12-day forecast |
-| AIFS v2 | ECMWF | `Flooding.ipynb` | ERA5 (Copernicus CDS) at 2022-12-21, 2022-12-24 and 2022-12-28 00Z; the 11 ocean-wave inputs are zero-filled |
+| SFNO + PrecipitationAFNO v2 | NVIDIA | `Flooding.ipynb` | ERA5 (Copernicus CDS) at 2022-12-21, 2022-12-24 and 2022-12-28 00Z |
 | ERA5 | ECMWF reanalysis | both | reference: daily maximum 2 m temperature (from 6-hourly samples) and total precipitation (hourly accumulations) |
 
 ## Quick start
@@ -56,7 +56,7 @@ uv sync
 uv run python -m ipykernel install --user --name west-coast --display-name "west-coast"
 ```
 
-`uv sync` expects two prebuilt wheels (flash-attn and torch-harmonics) in a `wheels/` folder; see [docs/environment.md](docs/environment.md).
+`uv sync` expects a prebuilt torch-harmonics wheel in a `wheels/` folder; see [docs/environment.md](docs/environment.md).
 
 Open a notebook in JupyterLab and select the **west-coast** kernel, then run all cells.
 
@@ -69,14 +69,13 @@ _Runtime and GPU memory are filled in after the verified run._
 | Notebook | Event | Models | Verified against |
 |---|---|---|---|
 | `HeatWaves.ipynb` | September 2022 California heat wave | SFNO, Aurora | ERA5 daily maximum 2 m temperature at global, CONUS and California scales |
-| `Flooding.ipynb` | New Year 2022–23 atmospheric-river flood | AIFS v2 at 3, 7 and 10 days of lead | ERA5 daily and event-total precipitation over the West Coast |
+| `Flooding.ipynb` | New Year 2022–23 atmospheric-river flood | SFNO + PrecipitationAFNO v2 at 3, 7 and 10 days of lead | ERA5 daily and event-total precipitation over the West Coast |
 
 ## Repository layout
 
 ```text
 HeatWaves.ipynb       SFNO vs Aurora: September 2022 California heat wave
-Flooding.ipynb        AIFS v2 lead-time sweep: New Year 2022-23 atmospheric river
-aifs2_era5.py         lets earth2studio initialize AIFS v2 from ERA5 (CDS lexicon patch)
+Flooding.ipynb        SFNO + PrecipitationAFNO v2 lead-time sweep: New Year 2022-23 atmospheric river
 metrics.py            area-weighted skill metrics
 tests/                unit tests for metrics.py
 docs/images/          figures shown in this README
@@ -94,5 +93,6 @@ Pinned versions, install caveats, and fixes are in [docs/environment.md](docs/en
 
 - [NVIDIA Earth2Studio](https://github.com/NVIDIA/earth2studio) and its [documentation](https://nvidia.github.io/earth2studio/)
 - [ERA5 hourly data on single levels](https://cds.climate.copernicus.eu/datasets/reanalysis-era5-single-levels) (Copernicus Climate Data Store)
-- [AIFS Single v2 model card](https://huggingface.co/ecmwf/aifs-single-2.0) (ECMWF)
+- [Spherical Fourier Neural Operators: Learning Stable Dynamics on the Sphere](https://arxiv.org/abs/2306.03838) (the SFNO paper) and [Modulus-Makani](https://github.com/NVIDIA/modulus-makani), the NVIDIA code SFNO is trained with
+- [SFNO 73-channel checkpoint](https://catalog.ngc.nvidia.com/orgs/nvidia/teams/modulus/models/sfno_73ch_small) and [PrecipitationAFNO v2 checkpoint](https://catalog.ngc.nvidia.com/orgs/nvidia/teams/earth-2/models/afno_dx_tp-v1-era5) (NVIDIA NGC)
 - [uv](https://docs.astral.sh/uv/)
