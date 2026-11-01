@@ -35,7 +35,7 @@ At every lead the forecast produces far less rain than ERA5 (total bias −56% t
 
 ![SFNO + PrecipitationAFNO v2 and ERA5 event-total precipitation over the West Coast for 3, 7 and 10 days of lead time, with the difference](docs/images/precip_eventtotal_leadsweep.png)
 
-*Flood: event-total precipitation (Dec 31 – Jan 1) from SFNO + PrecipitationAFNO v2 at each lead time next to ERA5, with SFNO + PrecipitationAFNO v2 − ERA5 in the last column.*
+*Flood: event-total precipitation (Dec 31 – Jan 1) from SFNO + PrecipitationAFNO v2 at each lead time next to ERA5, with the forecast − ERA5 difference in the last column.*
 
 ## Models and data
 
@@ -88,7 +88,7 @@ docs/images/          figures shown in this README
 docs/results/         CSV metric tables written by the notebooks
 docs/environment.md   pinned versions and install notes
 data/                 generated forecasts and ERA5 downloads (gitignored)
-figures/              generated figures (gitignored)
+figures/              the figures each notebook produces, at full size
 ```
 
 ## Environment notes
